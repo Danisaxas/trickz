@@ -3,15 +3,15 @@
   <meta charset="utf-8"/>
   <meta content="width=device-width, initial-scale=1" name="viewport"/>
   <title>
-   Profile Card with Interactive Stretchable Background Lines, Language Toggle, and Typing Animation
+   Profile Card with Settings, Language, Theme Toggle, and Typing Animation
   </title>
-  <script src="https://cdn.tailwindcss.com">
-  </script>
+  <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&amp;display=swap" rel="stylesheet"/>
   <style>
    body {
       font-family: 'Roboto Mono', monospace;
+      transition: background-color 0.3s ease, color 0.3s ease;
     }
     /* Background animation */
     .animated-bg {
@@ -103,6 +103,148 @@
     .typing-value {
       color: #d35400;
     }
+    /* Minimalist language select */
+    #languageSelect {
+      background-color: #2a3a7a;
+      color: white;
+      font-family: 'Roboto Mono', monospace;
+      font-size: 0.875rem;
+      padding: 0.25rem 0.5rem;
+      border-radius: 0.375rem;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      outline-offset: 2px;
+      outline-color: transparent;
+    }
+    #languageSelect:hover, #languageSelect:focus {
+      background-color: #3b4a9a;
+      outline-color: #facc15;
+    }
+    /* Settings button bottom-left */
+    #settingsBtn {
+      position: fixed;
+      bottom: 1rem;
+      left: 1rem;
+      z-index: 50;
+      background-color: #2a3a7a;
+      color: white;
+      width: 44px;
+      height: 44px;
+      border-radius: 9999px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 0 10px rgb(250 204 21 / 0.7);
+      transition: background-color 0.3s ease;
+    }
+    #settingsBtn:hover {
+      background-color: #3b4a9a;
+    }
+    /* Settings panel */
+    #settingsPanel {
+      position: fixed;
+      bottom: 60px;
+      left: 1rem;
+      width: 280px;
+      max-width: 90vw;
+      background-color: #12161f;
+      border-radius: 0.75rem;
+      box-shadow: 0 0 15px rgb(250 204 21 / 0.7);
+      padding: 1rem 1.5rem;
+      color: white;
+      font-family: 'Roboto Mono', monospace;
+      font-size: 0.875rem;
+      z-index: 50;
+      display: none;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    #settingsPanel.show {
+      display: flex;
+    }
+    #settingsPanel h3 {
+      font-weight: 700;
+      font-size: 1.125rem;
+      margin-bottom: 0.5rem;
+      border-bottom: 1px solid #2a3a7a;
+      padding-bottom: 0.25rem;
+    }
+    #settingsPanel button, #settingsPanel select {
+      background-color: #2a3a7a;
+      border: none;
+      border-radius: 0.375rem;
+      color: white;
+      font-family: 'Roboto Mono', monospace;
+      font-size: 0.875rem;
+      padding: 0.4rem 0.75rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      width: 100%;
+    }
+    #settingsPanel button:hover, #settingsPanel select:hover, #settingsPanel button:focus, #settingsPanel select:focus {
+      background-color: #3b4a9a;
+      outline: none;
+    }
+    #settingsPanel .section {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    #settingsPanel .section label {
+      font-weight: 600;
+    }
+    #settingsPanel .section .btn-group {
+      display: flex;
+      gap: 0.5rem;
+    }
+    #settingsPanel .btn-group button {
+      flex: 1;
+      padding: 0.4rem 0;
+    }
+    /* Dark theme */
+    body.dark {
+      background-color: #12161f;
+      color: #cbd5e1;
+    }
+    body.dark .typing-container {
+      color: #94a3b8;
+      border-right-color: #94a3b8;
+    }
+    body.dark .typing-variable {
+      color: #1e40af;
+    }
+    body.dark .typing-value {
+      color: #ea580c;
+    }
+    body.dark #languageSelect {
+      background-color: #1e293b;
+      color: #cbd5e1;
+    }
+    body.dark #languageSelect:hover, body.dark #languageSelect:focus {
+      background-color: #334155;
+      outline-color: #facc15;
+    }
+    body.dark #settingsBtn {
+      background-color: #1e293b;
+      box-shadow: 0 0 10px rgb(250 204 21 / 0.7);
+    }
+    body.dark #settingsBtn:hover {
+      background-color: #334155;
+    }
+    body.dark #settingsPanel {
+      background-color: #1e293b;
+      box-shadow: 0 0 15px rgb(250 204 21 / 0.7);
+      color: #cbd5e1;
+    }
+    body.dark #settingsPanel button, body.dark #settingsPanel select {
+      background-color: #334155;
+      color: #cbd5e1;
+    }
+    body.dark #settingsPanel button:hover, body.dark #settingsPanel select:hover, body.dark #settingsPanel button:focus, body.dark #settingsPanel select:focus {
+      background-color: #475569;
+    }
   </style>
  </head>
  <body class="min-h-screen bg-[#243a56] relative overflow-hidden flex flex-col items-center justify-center p-4">
@@ -130,21 +272,20 @@
   <div class="absolute bottom-20 right-28 w-1.5 h-1.5 rounded-full bg-[#9ca3af] opacity-30"></div>
   <div class="absolute bottom-10 left-20 w-1.5 h-1.5 rounded-full bg-[#9ca3af] opacity-30"></div>
 
-  <!-- Language toggle -->
-  <div class="mb-6 flex gap-4 z-20 relative">
-   <button id="enBtn" class="px-4 py-2 rounded bg-[#2a3a7a] text-white font-mono text-sm font-semibold hover:bg-[#3b4a9a] transition" type="button">
-    English
-   </button>
-   <button id="esBtn" class="px-4 py-2 rounded bg-[#2a3a7a] text-white font-mono text-sm font-semibold hover:bg-[#3b4a9a] transition" type="button">
-    Español
-   </button>
+  <!-- Language select -->
+  <div class="mb-6 z-20 relative">
+   <label for="languageSelect" class="sr-only">Language</label>
+   <select id="languageSelect" aria-label="Select language">
+    <option value="en" selected>English</option>
+    <option value="es">Español</option>
+   </select>
   </div>
 
   <div class="max-w-xs w-full rounded-xl shadow-lg shadow-black/40 overflow-hidden bg-[#12161f] relative z-10">
    <div class="relative">
     <img alt="Desk with laptop, books, and a shadowed wall background" class="w-full h-44 object-cover rounded-t-xl" height="180" src="https://storage.googleapis.com/a1aa/image/6390a342-c59a-4930-a6a6-cbcdb0acad7b.jpg" width="400"/>
     <div class="absolute top-4 right-4 flex flex-col gap-3">
-     <a href="https://t.me/yTrickz" target="_blank" rel="noopener noreferrer" aria-label="Telegram link" class="w-10 h-10 rounded-full bg-[#243a56]/80 flex items-center justify-center text-white hover:bg-[#243a56]/90 transition">
+     <a href="https://t.me/yTricz" target="_blank" rel="noopener noreferrer" aria-label="Telegram link" class="w-10 h-10 rounded-full bg-[#243a56]/80 flex items-center justify-center text-white hover:bg-[#243a56]/90 transition">
       <i class="fab fa-telegram-plane"></i>
      </a>
      <button aria-label="Visit website" class="w-10 h-10 rounded-full bg-[#243a56]/80 flex items-center justify-center text-white hover:bg-[#243a56]/90 transition">
@@ -179,6 +320,44 @@
     <div class="typing-container mx-auto mt-6" aria-live="polite" aria-atomic="true" id="typingCode" role="textbox"></div>
    </div>
   </div>
+
+  <!-- Settings button bottom-left -->
+  <button id="settingsBtn" aria-label="Open settings" title="Settings">
+   <i class="fas fa-cog fa-lg"></i>
+  </button>
+
+  <!-- Settings panel -->
+  <aside id="settingsPanel" role="dialog" aria-modal="true" aria-labelledby="settingsTitle" tabindex="-1">
+   <h3 id="settingsTitle">Settings</h3>
+
+   <div class="section" id="accountSection">
+    <label>Account</label>
+    <div class="btn-group">
+     <button type="button" id="registerBtn">Register</button>
+     <button type="button" id="loginBtn">Login</button>
+    </div>
+   </div>
+
+   <div class="section" id="languageSection">
+    <label for="languageSelectPanel">Language</label>
+    <select id="languageSelectPanel" aria-label="Select language">
+     <option value="en" selected>English</option>
+     <option value="es">Español</option>
+    </select>
+   </div>
+
+   <div class="section" id="themeSection">
+    <label>Theme</label>
+    <div class="btn-group">
+     <button type="button" id="lightThemeBtn">Light</button>
+     <button type="button" id="darkThemeBtn">Dark</button>
+    </div>
+   </div>
+
+   <div class="section" id="logoutSection">
+    <button type="button" id="logoutBtn" class="bg-red-600 hover:bg-red-700 focus:bg-red-700">Log Out</button>
+   </div>
+  </aside>
 
   <script>
    // Interactive background lines and stars highlight on mouse move and stretch lines on drag
@@ -270,12 +449,16 @@
       const {x, y} = getMousePos(e);
 
       if (draggingLine) {
+        // Clamp x and y inside SVG bounds
+        const clampedX = Math.min(Math.max(x, 0), svg.clientWidth);
+        const clampedY = Math.min(Math.max(y, 0), svg.clientHeight);
+
         if (dragPoint === 'start') {
-          draggingLine.setAttribute('x1', x);
-          draggingLine.setAttribute('y1', y);
+          draggingLine.setAttribute('x1', clampedX);
+          draggingLine.setAttribute('y1', clampedY);
         } else if (dragPoint === 'end') {
-          draggingLine.setAttribute('x2', x);
-          draggingLine.setAttribute('y2', y);
+          draggingLine.setAttribute('x2', clampedX);
+          draggingLine.setAttribute('y2', clampedY);
         }
         return;
       }
@@ -312,9 +495,9 @@
       stars.forEach(star => star.classList.remove('highlight'));
     });
 
-    // Language toggle functionality
-    const enBtn = document.getElementById('enBtn');
-    const esBtn = document.getElementById('esBtn');
+    // Language select functionality
+    const languageSelect = document.getElementById('languageSelect');
+    const languageSelectPanel = document.getElementById('languageSelectPanel');
     const nameEl = document.getElementById('name');
     const handleEl = document.getElementById('handle');
     const buttonsEl = document.getElementById('buttons');
@@ -379,21 +562,20 @@
         buttonsEl.appendChild(button);
       });
 
-      // Update active button styles
-      if (lang === 'en') {
-        enBtn.classList.add('bg-[#3b4a9a]');
-        esBtn.classList.remove('bg-[#3b4a9a]');
-      } else {
-        esBtn.classList.add('bg-[#3b4a9a]');
-        enBtn.classList.remove('bg-[#3b4a9a]');
-      }
+      // Sync selects
+      languageSelect.value = lang;
+      languageSelectPanel.value = lang;
 
       // Start typing animation with new language code lines
       startTypingAnimation(data.codeLines);
     }
 
-    enBtn.addEventListener('click', () => setLanguage('en'));
-    esBtn.addEventListener('click', () => setLanguage('es'));
+    languageSelect.addEventListener('change', (e) => {
+      setLanguage(e.target.value);
+    });
+    languageSelectPanel.addEventListener('change', (e) => {
+      setLanguage(e.target.value);
+    });
 
     // Typing animation logic
     let typingInterval;
@@ -422,7 +604,7 @@
         typingCodeEl.innerHTML = highlightCode(currentText);
         if (currentCharIndex === fullText.length) {
           isDeleting = true;
-          setTimeout(type, 1500);
+          setTimeout(type, 2000);
           return;
         }
       } else {
@@ -432,11 +614,11 @@
         if (currentCharIndex === 0) {
           isDeleting = false;
           currentLineIndex = (currentLineIndex + 1) % codeLinesGlobal.length;
-          setTimeout(type, 500);
+          setTimeout(type, 700);
           return;
         }
       }
-      setTimeout(type, isDeleting ? 50 : 100);
+      setTimeout(type, isDeleting ? 60 : 120);
     }
 
     // Highlight parts of the code line with spans for colors
@@ -455,6 +637,56 @@
 
     // Initialize default language English and start typing
     setLanguage('en');
+
+    // Settings panel toggle
+    const settingsBtn = document.getElementById('settingsBtn');
+    const settingsPanel = document.getElementById('settingsPanel');
+
+    settingsBtn.addEventListener('click', () => {
+      settingsPanel.classList.toggle('show');
+      if (settingsPanel.classList.contains('show')) {
+        settingsPanel.focus();
+      }
+    });
+
+    // Close settings panel on Escape key
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && settingsPanel.classList.contains('show')) {
+        settingsPanel.classList.remove('show');
+        settingsBtn.focus();
+      }
+    });
+
+    // Theme toggle buttons
+    const lightThemeBtn = document.getElementById('lightThemeBtn');
+    const darkThemeBtn = document.getElementById('darkThemeBtn');
+
+    function setTheme(theme) {
+      if (theme === 'dark') {
+        document.body.classList.add('dark');
+      } else {
+        document.body.classList.remove('dark');
+      }
+      localStorage.setItem('theme', theme);
+    }
+
+    lightThemeBtn.addEventListener('click', () => setTheme('light'));
+    darkThemeBtn.addEventListener('click', () => setTheme('dark'));
+
+    // Load saved theme or default to light
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    setTheme(savedTheme);
+
+    // Register, Login, Logout buttons (placeholders)
+    document.getElementById('registerBtn').addEventListener('click', () => {
+      alert('Register clicked (placeholder)');
+    });
+    document.getElementById('loginBtn').addEventListener('click', () => {
+      alert('Login clicked (placeholder)');
+    });
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      alert('Log Out clicked (placeholder)');
+    });
   </script>
  </body>
 </html>

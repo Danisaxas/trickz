@@ -3,7 +3,7 @@
   <meta charset="utf-8"/>
   <meta content="width=device-width, initial-scale=1" name="viewport"/>
   <title>
-   Profile Card with Interactive Background, Language Toggle, and Typing Animation
+   Profile Card with Interactive Stretchable Background Lines, Language Toggle, and Typing Animation
   </title>
   <script src="https://cdn.tailwindcss.com">
   </script>
@@ -23,6 +23,8 @@
       overflow: visible;
       z-index: 0;
       cursor: crosshair;
+      user-select: none;
+      touch-action: none;
     }
     .star {
       fill: #9ca3af;
@@ -30,6 +32,7 @@
       animation: twinkle 3s infinite alternate;
       transform-origin: center;
       transition: opacity 0.3s ease, transform 0.3s ease;
+      pointer-events: none;
     }
     .star:nth-child(2n) {
       animation-duration: 4s;
@@ -53,6 +56,7 @@
       animation: pulse 6s infinite alternate;
       transform-origin: center;
       transition: stroke-opacity 0.3s ease, stroke 0.3s ease;
+      cursor: grab;
     }
     .line:nth-child(2n) {
       animation-duration: 7s;
@@ -140,9 +144,9 @@
    <div class="relative">
     <img alt="Desk with laptop, books, and a shadowed wall background" class="w-full h-44 object-cover rounded-t-xl" height="180" src="https://storage.googleapis.com/a1aa/image/6390a342-c59a-4930-a6a6-cbcdb0acad7b.jpg" width="400"/>
     <div class="absolute top-4 right-4 flex flex-col gap-3">
-     <button aria-label="Send message" class="w-10 h-10 rounded-full bg-[#243a56]/80 flex items-center justify-center text-white hover:bg-[#243a56]/90 transition">
-      <i class="fas fa-paper-plane"></i>
-     </button>
+     <a href="https://t.me/yTrickz" target="_blank" rel="noopener noreferrer" aria-label="Telegram link" class="w-10 h-10 rounded-full bg-[#243a56]/80 flex items-center justify-center text-white hover:bg-[#243a56]/90 transition">
+      <i class="fab fa-telegram-plane"></i>
+     </a>
      <button aria-label="Visit website" class="w-10 h-10 rounded-full bg-[#243a56]/80 flex items-center justify-center text-white hover:bg-[#243a56]/90 transition">
       <i class="fas fa-globe"></i>
      </button>
@@ -177,49 +181,22 @@
   </div>
 
   <script>
-   // Interactive background lines and stars highlight on mouse move
+   // Interactive background lines and stars highlight on mouse move and stretch lines on drag
     const svg = document.querySelector('.animated-bg');
     const lines = Array.from(svg.querySelectorAll('.line'));
     const stars = Array.from(svg.querySelectorAll('.star'));
 
-    svg.addEventListener('mousemove', (e) => {
+    let draggingLine = null;
+    let dragPoint = null; // 'start' or 'end'
+
+    function getMousePos(evt) {
       const rect = svg.getBoundingClientRect();
-      const mouseX = e.clientX - rect.left;
-      const mouseY = e.clientY - rect.top;
+      return {
+        x: evt.clientX - rect.left,
+        y: evt.clientY - rect.top
+      };
+    }
 
-      lines.forEach(line => {
-        const x1 = parseFloat(line.getAttribute('x1'));
-        const y1 = parseFloat(line.getAttribute('y1'));
-        const x2 = parseFloat(line.getAttribute('x2'));
-        const y2 = parseFloat(line.getAttribute('y2'));
-
-        // Calculate distance from mouse to line segment
-        const dist = pointLineDistance(mouseX, mouseY, x1, y1, x2, y2);
-        if (dist < 50) {
-          line.classList.add('highlight');
-        } else {
-          line.classList.remove('highlight');
-        }
-      });
-
-      stars.forEach(star => {
-        const cx = parseFloat(star.getAttribute('cx'));
-        const cy = parseFloat(star.getAttribute('cy'));
-        const dist = Math.hypot(mouseX - cx, mouseY - cy);
-        if (dist < 40) {
-          star.classList.add('highlight');
-        } else {
-          star.classList.remove('highlight');
-        }
-      });
-    });
-
-    svg.addEventListener('mouseleave', () => {
-      lines.forEach(line => line.classList.remove('highlight'));
-      stars.forEach(star => star.classList.remove('highlight'));
-    });
-
-    // Helper function to calculate distance from point to line segment
     function pointLineDistance(px, py, x1, y1, x2, y2) {
       const A = px - x1;
       const B = py - y1;
@@ -251,6 +228,89 @@
       const dy = py - yy;
       return Math.sqrt(dx * dx + dy * dy);
     }
+
+    function isNearPoint(px, py, x, y, radius = 10) {
+      return Math.hypot(px - x, py - y) <= radius;
+    }
+
+    svg.addEventListener('mousedown', (e) => {
+      const {x, y} = getMousePos(e);
+      for (const line of lines) {
+        const x1 = parseFloat(line.getAttribute('x1'));
+        const y1 = parseFloat(line.getAttribute('y1'));
+        const x2 = parseFloat(line.getAttribute('x2'));
+        const y2 = parseFloat(line.getAttribute('y2'));
+
+        if (isNearPoint(x, y, x1, y1)) {
+          draggingLine = line;
+          dragPoint = 'start';
+          line.style.cursor = 'grabbing';
+          e.preventDefault();
+          return;
+        }
+        if (isNearPoint(x, y, x2, y2)) {
+          draggingLine = line;
+          dragPoint = 'end';
+          line.style.cursor = 'grabbing';
+          e.preventDefault();
+          return;
+        }
+      }
+    });
+
+    window.addEventListener('mouseup', () => {
+      if (draggingLine) {
+        draggingLine.style.cursor = 'grab';
+      }
+      draggingLine = null;
+      dragPoint = null;
+    });
+
+    window.addEventListener('mousemove', (e) => {
+      const {x, y} = getMousePos(e);
+
+      if (draggingLine) {
+        if (dragPoint === 'start') {
+          draggingLine.setAttribute('x1', x);
+          draggingLine.setAttribute('y1', y);
+        } else if (dragPoint === 'end') {
+          draggingLine.setAttribute('x2', x);
+          draggingLine.setAttribute('y2', y);
+        }
+        return;
+      }
+
+      // Highlight lines and stars on hover
+      lines.forEach(line => {
+        const x1 = parseFloat(line.getAttribute('x1'));
+        const y1 = parseFloat(line.getAttribute('y1'));
+        const x2 = parseFloat(line.getAttribute('x2'));
+        const y2 = parseFloat(line.getAttribute('y2'));
+
+        const dist = pointLineDistance(x, y, x1, y1, x2, y2);
+        if (dist < 50) {
+          line.classList.add('highlight');
+        } else {
+          line.classList.remove('highlight');
+        }
+      });
+
+      stars.forEach(star => {
+        const cx = parseFloat(star.getAttribute('cx'));
+        const cy = parseFloat(star.getAttribute('cy'));
+        const dist = Math.hypot(x - cx, y - cy);
+        if (dist < 40) {
+          star.classList.add('highlight');
+        } else {
+          star.classList.remove('highlight');
+        }
+      });
+    });
+
+    svg.addEventListener('mouseleave', () => {
+      lines.forEach(line => line.classList.remove('highlight'));
+      stars.forEach(star => star.classList.remove('highlight'));
+    });
 
     // Language toggle functionality
     const enBtn = document.getElementById('enBtn');

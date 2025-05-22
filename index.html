@@ -1,0 +1,400 @@
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1" name="viewport"/>
+  <title>
+   Profile Card with Interactive Background, Language Toggle, and Typing Animation
+  </title>
+  <script src="https://cdn.tailwindcss.com">
+  </script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&amp;display=swap" rel="stylesheet"/>
+  <style>
+   body {
+      font-family: 'Roboto Mono', monospace;
+    }
+    /* Background animation */
+    .animated-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+      z-index: 0;
+      cursor: crosshair;
+    }
+    .star {
+      fill: #9ca3af;
+      opacity: 0.3;
+      animation: twinkle 3s infinite alternate;
+      transform-origin: center;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+    .star:nth-child(2n) {
+      animation-duration: 4s;
+    }
+    .star:nth-child(3n) {
+      animation-duration: 5s;
+    }
+    @keyframes twinkle {
+      0% {
+        opacity: 0.3;
+        transform: scale(1);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1.3);
+      }
+    }
+    .line {
+      stroke: #9ca3af;
+      stroke-opacity: 0.3;
+      animation: pulse 6s infinite alternate;
+      transform-origin: center;
+      transition: stroke-opacity 0.3s ease, stroke 0.3s ease;
+    }
+    .line:nth-child(2n) {
+      animation-duration: 7s;
+    }
+    .line:nth-child(3n) {
+      animation-duration: 8s;
+    }
+    @keyframes pulse {
+      0% {
+        stroke-opacity: 0.3;
+      }
+      100% {
+        stroke-opacity: 0.7;
+      }
+    }
+    /* Highlight line on hover */
+    .line.highlight {
+      stroke: #facc15;
+      stroke-opacity: 1 !important;
+      animation: none !important;
+    }
+    /* Highlight star on hover */
+    .star.highlight {
+      fill: #facc15;
+      opacity: 1 !important;
+      animation: none !important;
+      transform: scale(1.5) !important;
+    }
+    /* Typing animation styles */
+    .typing-container {
+      font-family: 'Roboto Mono', monospace;
+      font-size: 0.75rem;
+      color: #7f8c8d;
+      white-space: nowrap;
+      overflow: hidden;
+      border-right: 2px solid #7f8c8d;
+      width: max-content;
+      margin: 1.5rem auto 0;
+      min-height: 1.25rem;
+    }
+    .typing-variable {
+      color: #2a3a7a;
+    }
+    .typing-value {
+      color: #d35400;
+    }
+  </style>
+ </head>
+ <body class="min-h-screen bg-[#243a56] relative overflow-hidden flex flex-col items-center justify-center p-4">
+  <!-- animated constellation background -->
+  <svg aria-hidden="true" class="animated-bg" viewBox="0 0 1200 400" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" >
+   <line class="line" x1="50" x2="150" y1="20" y2="40"></line>
+   <line class="line" x1="1100" x2="1150" y1="100" y2="150"></line>
+   <line class="line" x1="1120" x2="1170" y1="140" y2="180"></line>
+   <line class="line" x1="1150" x2="1200" y1="150" y2="200"></line>
+   <line class="line" x1="1170" x2="1200" y1="180" y2="200"></line>
+   <line class="line" x1="100" x2="130" y1="300" y2="340"></line>
+   <line class="line" x1="130" x2="160" y1="340" y2="320"></line>
+   <circle class="star" cx="60" cy="25" r="2.5"></circle>
+   <circle class="star" cx="120" cy="35" r="2"></circle>
+   <circle class="star" cx="1130" cy="110" r="2.5"></circle>
+   <circle class="star" cx="1160" cy="160" r="2"></circle>
+   <circle class="star" cx="1180" cy="190" r="2.5"></circle>
+   <circle class="star" cx="105" cy="305" r="2"></circle>
+   <circle class="star" cx="140" cy="335" r="2.5"></circle>
+  </svg>
+  <div class="absolute top-20 left-10 w-1.5 h-1.5 rounded-full bg-[#9ca3af] opacity-30"></div>
+  <div class="absolute top-36 left-28 w-1.5 h-1.5 rounded-full bg-[#9ca3af] opacity-30"></div>
+  <div class="absolute top-10 right-20 w-1.5 h-1.5 rounded-full bg-[#9ca3af] opacity-30"></div>
+  <div class="absolute top-36 right-36 w-1.5 h-1.5 rounded-full bg-[#9ca3af] opacity-30"></div>
+  <div class="absolute bottom-20 right-28 w-1.5 h-1.5 rounded-full bg-[#9ca3af] opacity-30"></div>
+  <div class="absolute bottom-10 left-20 w-1.5 h-1.5 rounded-full bg-[#9ca3af] opacity-30"></div>
+
+  <!-- Language toggle -->
+  <div class="mb-6 flex gap-4 z-20 relative">
+   <button id="enBtn" class="px-4 py-2 rounded bg-[#2a3a7a] text-white font-mono text-sm font-semibold hover:bg-[#3b4a9a] transition" type="button">
+    English
+   </button>
+   <button id="esBtn" class="px-4 py-2 rounded bg-[#2a3a7a] text-white font-mono text-sm font-semibold hover:bg-[#3b4a9a] transition" type="button">
+    Español
+   </button>
+  </div>
+
+  <div class="max-w-xs w-full rounded-xl shadow-lg shadow-black/40 overflow-hidden bg-[#12161f] relative z-10">
+   <div class="relative">
+    <img alt="Desk with laptop, books, and a shadowed wall background" class="w-full h-44 object-cover rounded-t-xl" height="180" src="https://storage.googleapis.com/a1aa/image/6390a342-c59a-4930-a6a6-cbcdb0acad7b.jpg" width="400"/>
+    <div class="absolute top-4 right-4 flex flex-col gap-3">
+     <button aria-label="Send message" class="w-10 h-10 rounded-full bg-[#243a56]/80 flex items-center justify-center text-white hover:bg-[#243a56]/90 transition">
+      <i class="fas fa-paper-plane"></i>
+     </button>
+     <button aria-label="Visit website" class="w-10 h-10 rounded-full bg-[#243a56]/80 flex items-center justify-center text-white hover:bg-[#243a56]/90 transition">
+      <i class="fas fa-globe"></i>
+     </button>
+    </div>
+    <div class="absolute -bottom-12 left-1/2 -translate-x-1/2 w-24 h-24 rounded-full border-4 border-[#243a56] overflow-hidden">
+     <img alt="Close-up of a cat sitting on a laptop keyboard" class="w-full h-full object-cover" height="96" src="https://storage.googleapis.com/a1aa/image/8cf9d279-9c02-4238-e371-a1c4d471405f.jpg" width="96"/>
+    </div>
+   </div>
+   <div class="pt-16 pb-8 px-8 text-center text-white">
+    <h2 class="font-mono font-extrabold text-lg leading-none" id="name">
+     MINOTBUG
+    </h2>
+    <p class="mt-1 font-sans text-base font-normal" id="handle">
+     @MinosTbug
+    </p>
+    <div class="mt-6 flex justify-center gap-4 flex-wrap" id="buttons">
+     <button class="flex items-center gap-2 bg-[#2a3a7a] text-white text-sm font-normal rounded-full px-4 py-2">
+      <i class="fas fa-info-circle text-xs"></i>
+      Info
+     </button>
+     <button class="flex items-center gap-2 bg-[#2a3a7a] text-white text-sm font-normal rounded-full px-4 py-2">
+      <i class="fas fa-code"></i>
+      Habilidades
+     </button>
+     <button class="flex items-center gap-2 bg-[#2a3a7a] text-white text-sm font-normal rounded-full px-4 py-2">
+      <i class="fas fa-briefcase"></i>
+      Teams
+     </button>
+    </div>
+    <div class="typing-container mx-auto mt-6" aria-live="polite" aria-atomic="true" id="typingCode" role="textbox"></div>
+   </div>
+  </div>
+
+  <script>
+   // Interactive background lines and stars highlight on mouse move
+    const svg = document.querySelector('.animated-bg');
+    const lines = Array.from(svg.querySelectorAll('.line'));
+    const stars = Array.from(svg.querySelectorAll('.star'));
+
+    svg.addEventListener('mousemove', (e) => {
+      const rect = svg.getBoundingClientRect();
+      const mouseX = e.clientX - rect.left;
+      const mouseY = e.clientY - rect.top;
+
+      lines.forEach(line => {
+        const x1 = parseFloat(line.getAttribute('x1'));
+        const y1 = parseFloat(line.getAttribute('y1'));
+        const x2 = parseFloat(line.getAttribute('x2'));
+        const y2 = parseFloat(line.getAttribute('y2'));
+
+        // Calculate distance from mouse to line segment
+        const dist = pointLineDistance(mouseX, mouseY, x1, y1, x2, y2);
+        if (dist < 50) {
+          line.classList.add('highlight');
+        } else {
+          line.classList.remove('highlight');
+        }
+      });
+
+      stars.forEach(star => {
+        const cx = parseFloat(star.getAttribute('cx'));
+        const cy = parseFloat(star.getAttribute('cy'));
+        const dist = Math.hypot(mouseX - cx, mouseY - cy);
+        if (dist < 40) {
+          star.classList.add('highlight');
+        } else {
+          star.classList.remove('highlight');
+        }
+      });
+    });
+
+    svg.addEventListener('mouseleave', () => {
+      lines.forEach(line => line.classList.remove('highlight'));
+      stars.forEach(star => star.classList.remove('highlight'));
+    });
+
+    // Helper function to calculate distance from point to line segment
+    function pointLineDistance(px, py, x1, y1, x2, y2) {
+      const A = px - x1;
+      const B = py - y1;
+      const C = x2 - x1;
+      const D = y2 - y1;
+
+      const dot = A * C + B * D;
+      const len_sq = C * C + D * D;
+      let param = -1;
+      if (len_sq !== 0) //in case of 0 length line
+          param = dot / len_sq;
+
+      let xx, yy;
+
+      if (param < 0) {
+        xx = x1;
+        yy = y1;
+      }
+      else if (param > 1) {
+        xx = x2;
+        yy = y2;
+      }
+      else {
+        xx = x1 + param * C;
+        yy = y1 + param * D;
+      }
+
+      const dx = px - xx;
+      const dy = py - yy;
+      return Math.sqrt(dx * dx + dy * dy);
+    }
+
+    // Language toggle functionality
+    const enBtn = document.getElementById('enBtn');
+    const esBtn = document.getElementById('esBtn');
+    const nameEl = document.getElementById('name');
+    const handleEl = document.getElementById('handle');
+    const buttonsEl = document.getElementById('buttons');
+    const typingCodeEl = document.getElementById('typingCode');
+
+    const content = {
+      en: {
+        name: 'MINOTBUG',
+        handle: '@MinosTbug',
+        buttons: [
+          { icon: 'fas fa-info-circle', text: 'Info' },
+          { icon: 'fas fa-code', text: 'Skills' },
+          { icon: 'fas fa-briefcase', text: 'Teams' }
+        ],
+        codeLines: [
+          "$variable = 'PHP';",
+          "$variable = 'JavaScript';",
+          "$variable = 'Python';",
+          "$variable = 'Ruby';",
+          "$variable = 'Go';",
+          "$variable = 'TypeScript';",
+          "$variable = 'C++';",
+          "$variable = 'Java';"
+        ]
+      },
+      es: {
+        name: 'MINOTBUG',
+        handle: '@MinosTbug',
+        buttons: [
+          { icon: 'fas fa-info-circle', text: 'Info' },
+          { icon: 'fas fa-code', text: 'Habilidades' },
+          { icon: 'fas fa-briefcase', text: 'Equipos' }
+        ],
+        codeLines: [
+          "$variable = 'PHP';",
+          "$variable = 'JavaScript';",
+          "$variable = 'Python';",
+          "$variable = 'Ruby';",
+          "$variable = 'Go';",
+          "$variable = 'TypeScript';",
+          "$variable = 'C++';",
+          "$variable = 'Java';"
+        ]
+      }
+    };
+
+    function setLanguage(lang) {
+      const data = content[lang];
+      nameEl.textContent = data.name;
+      handleEl.textContent = data.handle;
+
+      // Clear buttons
+      buttonsEl.innerHTML = '';
+      data.buttons.forEach(btn => {
+        const button = document.createElement('button');
+        button.className = 'flex items-center gap-2 bg-[#2a3a7a] text-white text-sm font-normal rounded-full px-4 py-2';
+        const icon = document.createElement('i');
+        icon.className = btn.icon;
+        icon.style.fontSize = '0.75rem';
+        button.appendChild(icon);
+        button.appendChild(document.createTextNode(btn.text));
+        buttonsEl.appendChild(button);
+      });
+
+      // Update active button styles
+      if (lang === 'en') {
+        enBtn.classList.add('bg-[#3b4a9a]');
+        esBtn.classList.remove('bg-[#3b4a9a]');
+      } else {
+        esBtn.classList.add('bg-[#3b4a9a]');
+        enBtn.classList.remove('bg-[#3b4a9a]');
+      }
+
+      // Start typing animation with new language code lines
+      startTypingAnimation(data.codeLines);
+    }
+
+    enBtn.addEventListener('click', () => setLanguage('en'));
+    esBtn.addEventListener('click', () => setLanguage('es'));
+
+    // Typing animation logic
+    let typingInterval;
+    let currentLineIndex = 0;
+    let currentCharIndex = 0;
+    let isDeleting = false;
+    let currentText = '';
+    let codeLinesGlobal = [];
+
+    function startTypingAnimation(lines) {
+      clearInterval(typingInterval);
+      currentLineIndex = 0;
+      currentCharIndex = 0;
+      isDeleting = false;
+      currentText = '';
+      codeLinesGlobal = lines;
+      typingCodeEl.innerHTML = '';
+      type();
+    }
+
+    function type() {
+      const fullText = codeLinesGlobal[currentLineIndex];
+      if (!isDeleting) {
+        currentText = fullText.substring(0, currentCharIndex + 1);
+        currentCharIndex++;
+        typingCodeEl.innerHTML = highlightCode(currentText);
+        if (currentCharIndex === fullText.length) {
+          isDeleting = true;
+          setTimeout(type, 1500);
+          return;
+        }
+      } else {
+        currentText = fullText.substring(0, currentCharIndex - 1);
+        currentCharIndex--;
+        typingCodeEl.innerHTML = highlightCode(currentText);
+        if (currentCharIndex === 0) {
+          isDeleting = false;
+          currentLineIndex = (currentLineIndex + 1) % codeLinesGlobal.length;
+          setTimeout(type, 500);
+          return;
+        }
+      }
+      setTimeout(type, isDeleting ? 50 : 100);
+    }
+
+    // Highlight parts of the code line with spans for colors
+    function highlightCode(text) {
+      // Regex to separate variable, equal sign, and value with quotes and semicolon
+      // Example: $variable = 'PHP';
+      const regex = /^(\$variable)(\s*=\s*)('.*?')(;?)$/;
+      const match = text.match(regex);
+      if (match) {
+        return `<span class="typing-variable">${match[1]}</span>${match[2]}<span class="typing-value">${match[3]}</span>${match[4]}`;
+      } else {
+        // If partial typing, color whole text white
+        return `<span>${text}</span>`;
+      }
+    }
+
+    // Initialize default language English and start typing
+    setLanguage('en');
+  </script>
+ </body>
+</html>

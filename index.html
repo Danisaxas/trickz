@@ -2,7 +2,7 @@
 <head>
   <meta charset="utf-8" />
   <meta content="width=device-width, initial-scale=1" name="viewport" />
-  <title>Profile Card with Settings, Typing Animation, and Interactive Background</title>
+  <title>Profile Card with Interactive Background, Language Detection, and Typing Animation</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
@@ -16,81 +16,142 @@
     body {
       font-family: "Roboto Mono", monospace;
       transition: background-color 0.3s ease, color 0.3s ease;
+      margin: 0;
+      overflow-x: hidden;
+      background-color: #243a56;
+      color: white;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 1rem;
     }
-    /* Background animation */
-    .animated-bg {
-      position: absolute;
+    /* Background container */
+    #backgroundCanvas {
+      position: fixed;
       top: 0;
       left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 0;
+      pointer-events: none;
+      background-color: #243a56;
+    }
+    /* Profile card */
+    .profile-card {
+      position: relative;
+      z-index: 10;
+      max-width: 320px;
+      width: 100%;
+      background-color: #12161f;
+      border-radius: 1rem;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.7);
+      overflow: hidden;
+      color: white;
+      font-family: "Roboto Mono", monospace;
+    }
+    .profile-header {
+      position: relative;
+      height: 180px;
+      overflow: hidden;
+      border-top-left-radius: 1rem;
+      border-top-right-radius: 1rem;
+    }
+    .profile-header img.bg-img {
       width: 100%;
       height: 100%;
-      overflow: visible;
-      z-index: 0;
-      cursor: crosshair;
-      user-select: none;
-      touch-action: none;
+      object-fit: cover;
+      display: block;
     }
-    .star {
-      fill: #9ca3af;
-      opacity: 0.3;
-      animation: twinkle 3s infinite alternate;
-      transform-origin: center;
-      transition: opacity 0.3s ease, transform 0.3s ease;
-      pointer-events: none;
+    .profile-header .actions {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
     }
-    .star:nth-child(2n) {
-      animation-duration: 4s;
+    .profile-header .actions a,
+    .profile-header .actions button {
+      width: 40px;
+      height: 40px;
+      background-color: rgba(36, 58, 86, 0.8);
+      border-radius: 9999px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      text-decoration: none;
     }
-    .star:nth-child(3n) {
-      animation-duration: 5s;
+    .profile-header .actions a:hover,
+    .profile-header .actions button:hover {
+      background-color: rgba(36, 58, 86, 0.95);
     }
-    @keyframes twinkle {
-      0% {
-        opacity: 0.3;
-        transform: scale(1);
-      }
-      100% {
-        opacity: 1;
-        transform: scale(1.3);
-      }
+    .profile-avatar {
+      position: absolute;
+      bottom: -48px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 96px;
+      height: 96px;
+      border: 4px solid #243a56;
+      border-radius: 9999px;
+      overflow: hidden;
+      background-color: #12161f;
     }
-    .line {
-      stroke: #9ca3af;
-      stroke-opacity: 0.3;
-      animation: pulse 6s infinite alternate;
-      transform-origin: center;
-      transition: stroke-opacity 0.3s ease, stroke 0.3s ease;
-      cursor: grab;
+    .profile-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
     }
-    .line:nth-child(2n) {
-      animation-duration: 7s;
+    .profile-content {
+      padding: 64px 1.5rem 2rem;
+      text-align: center;
     }
-    .line:nth-child(3n) {
-      animation-duration: 8s;
+    .profile-content h2 {
+      font-weight: 800;
+      font-size: 1.25rem;
+      margin: 0;
+      letter-spacing: 0.05em;
     }
-    @keyframes pulse {
-      0% {
-        stroke-opacity: 0.3;
-      }
-      100% {
-        stroke-opacity: 0.7;
-      }
+    .profile-content p.handle {
+      margin-top: 0.25rem;
+      font-weight: 400;
+      font-family: "Roboto", sans-serif;
+      font-size: 1rem;
     }
-    /* Highlight line on hover */
-    .line.highlight {
-      stroke: #facc15;
-      stroke-opacity: 1 !important;
-      animation: none !important;
+    .profile-buttons {
+      margin-top: 1.5rem;
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      flex-wrap: wrap;
     }
-    /* Highlight star on hover */
-    .star.highlight {
-      fill: #facc15;
-      opacity: 1 !important;
-      animation: none !important;
-      transform: scale(1.5) !important;
+    .profile-buttons button {
+      background-color: #2a3a7a;
+      border: none;
+      border-radius: 9999px;
+      color: white;
+      padding: 0.5rem 1rem;
+      font-size: 0.875rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: background-color 0.3s ease;
     }
-    /* Typing animation styles */
-    .typing-container {
+    .profile-buttons button:hover {
+      background-color: #3b4a9a;
+    }
+    .profile-buttons i {
+      font-size: 0.8rem;
+    }
+    .code-typing {
+      margin-top: 2rem;
       font-family: "Roboto Mono", monospace;
       font-size: 0.75rem;
       color: #7f8c8d;
@@ -98,7 +159,8 @@
       overflow: hidden;
       border-right: 2px solid #7f8c8d;
       width: max-content;
-      margin: 1.5rem auto 0;
+      margin-left: auto;
+      margin-right: auto;
       min-height: 1.25rem;
     }
     .typing-variable {
@@ -112,7 +174,7 @@
       position: fixed;
       bottom: 1rem;
       left: 1rem;
-      z-index: 50;
+      z-index: 20;
       background-color: #2a3a7a;
       color: white;
       width: 44px;
@@ -124,6 +186,7 @@
       cursor: pointer;
       box-shadow: 0 0 10px rgb(250 204 21 / 0.7);
       transition: background-color 0.3s ease;
+      border: none;
     }
     #settingsBtn:hover {
       background-color: #3b4a9a;
@@ -142,7 +205,7 @@
       color: white;
       font-family: "Roboto Mono", monospace;
       font-size: 0.875rem;
-      z-index: 50;
+      z-index: 20;
       display: none;
       flex-direction: column;
       gap: 1rem;
@@ -203,7 +266,7 @@
       background-color: #12161f;
       color: #cbd5e1;
     }
-    body.dark .typing-container {
+    body.dark .code-typing {
       color: #94a3b8;
       border-right-color: #94a3b8;
     }
@@ -242,131 +305,62 @@
     }
   </style>
 </head>
-<body class="min-h-screen bg-[#243a56] relative overflow-hidden flex flex-col items-center justify-center p-4">
-  <!-- animated constellation background -->
-  <svg
-    aria-hidden="true"
-    class="animated-bg"
-    viewBox="0 0 1200 400"
-    preserveAspectRatio="none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <line class="line" x1="50" x2="150" y1="20" y2="40"></line>
-    <line class="line" x1="1100" x2="1150" y1="100" y2="150"></line>
-    <line class="line" x1="1120" x2="1170" y1="140" y2="180"></line>
-    <line class="line" x1="1150" x2="1200" y1="150" y2="200"></line>
-    <line class="line" x1="1170" x2="1200" y1="180" y2="200"></line>
-    <line class="line" x1="100" x2="130" y1="300" y2="340"></line>
-    <line class="line" x1="130" x2="160" y1="340" y2="320"></line>
-    <circle class="star" cx="60" cy="25" r="2.5"></circle>
-    <circle class="star" cx="120" cy="35" r="2"></circle>
-    <circle class="star" cx="1130" cy="110" r="2.5"></circle>
-    <circle class="star" cx="1160" cy="160" r="2"></circle>
-    <circle class="star" cx="1180" cy="190" r="2.5"></circle>
-    <circle class="star" cx="105" cy="305" r="2"></circle>
-    <circle class="star" cx="140" cy="335" r="2.5"></circle>
-  </svg>
-  <div
-    class="absolute top-20 left-10 w-1.5 h-1.5 rounded-full bg-[#9ca3af] opacity-30"
-  ></div>
-  <div
-    class="absolute top-36 left-28 w-1.5 h-1.5 rounded-full bg-[#9ca3af] opacity-30"
-  ></div>
-  <div
-    class="absolute top-10 right-20 w-1.5 h-1.5 rounded-full bg-[#9ca3af] opacity-30"
-  ></div>
-  <div
-    class="absolute top-36 right-36 w-1.5 h-1.5 rounded-full bg-[#9ca3af] opacity-30"
-  ></div>
-  <div
-    class="absolute bottom-20 right-28 w-1.5 h-1.5 rounded-full bg-[#9ca3af] opacity-30"
-  ></div>
-  <div
-    class="absolute bottom-10 left-20 w-1.5 h-1.5 rounded-full bg-[#9ca3af] opacity-30"
-  ></div>
+<body>
+  <canvas id="backgroundCanvas"></canvas>
 
-  <div
-    class="max-w-xs w-full rounded-xl shadow-lg shadow-black/40 overflow-hidden bg-[#12161f] relative z-10"
-  >
-    <div class="relative">
+  <div class="profile-card" role="main" aria-label="User profile card">
+    <div class="profile-header">
       <img
-        alt="Desk with laptop, books, and a shadowed wall background"
-        class="w-full h-44 object-cover rounded-t-xl"
-        height="180"
         src="https://storage.googleapis.com/a1aa/image/6390a342-c59a-4930-a6a6-cbcdb0acad7b.jpg"
+        alt="Desk with laptop, books, and a shadowed wall background"
+        class="bg-img"
         width="400"
+        height="180"
       />
-      <div class="absolute top-4 right-4 flex flex-col gap-3">
+      <div class="actions">
         <a
           href="https://t.me/yTrickz"
           target="_blank"
           rel="noopener noreferrer"
           aria-label="Telegram link"
-          class="w-10 h-10 rounded-full bg-[#243a56]/80 flex items-center justify-center text-white hover:bg-[#243a56]/90 transition"
+          title="Telegram"
           ><i class="fab fa-telegram-plane"></i
         ></a>
-        <button
-          aria-label="Visit website"
-          class="w-10 h-10 rounded-full bg-[#243a56]/80 flex items-center justify-center text-white hover:bg-[#243a56]/90 transition"
-        >
+        <button aria-label="Visit website" title="Visit website">
           <i class="fas fa-globe"></i>
         </button>
       </div>
-      <div
-        class="absolute -bottom-12 left-1/2 -translate-x-1/2 w-24 h-24 rounded-full border-4 border-[#243a56] overflow-hidden"
-      >
+      <div class="profile-avatar" aria-label="User avatar">
         <img
-          alt="Close-up of a cat sitting on a laptop keyboard"
-          class="w-full h-full object-cover"
-          height="96"
           src="https://storage.googleapis.com/a1aa/image/8cf9d279-9c02-4238-e371-a1c4d471405f.jpg"
+          alt="Close-up of a cat sitting on a laptop keyboard"
           width="96"
+          height="96"
         />
       </div>
     </div>
-    <div class="pt-16 pb-8 px-8 text-center text-white">
-      <h2 class="font-mono font-extrabold text-lg leading-none" id="name">
-        MINOTBUG
-      </h2>
-      <p class="mt-1 font-sans text-base font-normal" id="handle">
-        @MinosTbug
-      </p>
-      <div
-        class="mt-6 flex justify-center gap-4 flex-wrap"
-        id="buttons"
-      >
-        <button
-          class="flex items-center gap-2 bg-[#2a3a7a] text-white text-sm font-normal rounded-full px-4 py-2"
-        >
-          <i class="fas fa-info-circle text-xs"></i> Info
-        </button>
-        <button
-          class="flex items-center gap-2 bg-[#2a3a7a] text-white text-sm font-normal rounded-full px-4 py-2"
-        >
-          <i class="fas fa-code"></i> Habilidades
-        </button>
-        <button
-          class="flex items-center gap-2 bg-[#2a3a7a] text-white text-sm font-normal rounded-full px-4 py-2"
-        >
-          <i class="fas fa-briefcase"></i> Teams
-        </button>
+    <div class="profile-content">
+      <h2 id="name">MINOTBUG</h2>
+      <p class="handle" id="handle">@MinosTbug</p>
+      <div class="profile-buttons" id="buttons" role="group" aria-label="Profile action buttons">
+        <button><i class="fas fa-info-circle"></i> Info</button>
+        <button><i class="fas fa-code"></i> Habilidades</button>
+        <button><i class="fas fa-briefcase"></i> Teams</button>
       </div>
       <div
-        class="typing-container mx-auto mt-6"
-        aria-live="polite"
-        aria-atomic="true"
+        class="code-typing"
         id="typingCode"
         role="textbox"
+        aria-live="polite"
+        aria-atomic="true"
       ></div>
     </div>
   </div>
 
-  <!-- Settings button bottom-left -->
   <button id="settingsBtn" aria-label="Open settings" title="Settings">
     <i class="fas fa-cog fa-lg"></i>
   </button>
 
-  <!-- Settings panel -->
   <aside
     id="settingsPanel"
     role="dialog"
@@ -398,141 +392,124 @@
   </aside>
 
   <script>
-    // Interactive background lines and stars highlight on mouse move and drag entire line
-    const svg = document.querySelector(".animated-bg");
-    const lines = Array.from(svg.querySelectorAll(".line"));
-    const stars = Array.from(svg.querySelectorAll(".star"));
+    // Canvas background with many lines that move away from mouse pointer smoothly
+    const canvas = document.getElementById("backgroundCanvas");
+    const ctx = canvas.getContext("2d");
+    let width, height;
+    let lines = [];
+    const lineCount = 60;
+    const maxLineLength = 120;
+    const maxMoveDistance = 150;
+    const moveSpeed = 0.1;
 
-    let draggingLine = null;
-    let dragOffset = { x: 0, y: 0 };
-
-    function getMousePos(evt) {
-      const rect = svg.getBoundingClientRect();
-      return {
-        x: evt.clientX - rect.left,
-        y: evt.clientY - rect.top,
-      };
+    function resize() {
+      width = window.innerWidth;
+      height = window.innerHeight;
+      canvas.width = width;
+      canvas.height = height;
     }
+    window.addEventListener("resize", resize);
+    resize();
 
-    function pointLineDistance(px, py, x1, y1, x2, y2) {
-      const A = px - x1;
-      const B = py - y1;
-      const C = x2 - x1;
-      const D = y2 - y1;
-
-      const dot = A * C + B * D;
-      const len_sq = C * C + D * D;
-      let param = -1;
-      if (len_sq !== 0) param = dot / len_sq;
-
-      let xx, yy;
-
-      if (param < 0) {
-        xx = x1;
-        yy = y1;
-      } else if (param > 1) {
-        xx = x2;
-        yy = y2;
-      } else {
-        xx = x1 + param * C;
-        yy = y1 + param * D;
+    class Line {
+      constructor(x1, y1, x2, y2) {
+        this.x1 = x1;
+        this.y1 = y1;
+        this.x2 = x2;
+        this.y2 = y2;
+        this.origX1 = x1;
+        this.origY1 = y1;
+        this.origX2 = x2;
+        this.origY2 = y2;
+        this.offsetX1 = 0;
+        this.offsetY1 = 0;
+        this.offsetX2 = 0;
+        this.offsetY2 = 0;
       }
+      update(mouseX, mouseY) {
+        // Calculate distance from mouse to line midpoint
+        const midX = (this.origX1 + this.origX2) / 2;
+        const midY = (this.origY1 + this.origY2) / 2;
+        const dx = midX - mouseX;
+        const dy = midY - mouseY;
+        const dist = Math.sqrt(dx * dx + dy * dy);
 
-      const dx = px - xx;
-      const dy = py - yy;
-      return Math.sqrt(dx * dx + dy * dy);
-    }
+        if (dist < maxMoveDistance) {
+          // Calculate target offset proportional to distance (closer = bigger offset)
+          const factor = (maxMoveDistance - dist) / maxMoveDistance;
+          const angle = Math.atan2(dy, dx);
+          const targetOffsetX = Math.cos(angle) * factor * 30;
+          const targetOffsetY = Math.sin(angle) * factor * 30;
 
-    svg.addEventListener("mousedown", (e) => {
-      const { x, y } = getMousePos(e);
-      for (const line of lines) {
-        const x1 = parseFloat(line.getAttribute("x1"));
-        const y1 = parseFloat(line.getAttribute("y1"));
-        const x2 = parseFloat(line.getAttribute("x2"));
-        const y2 = parseFloat(line.getAttribute("y2"));
-
-        const dist = pointLineDistance(x, y, x1, y1, x2, y2);
-        if (dist < 10) {
-          draggingLine = line;
-          dragOffset.x = x - x1;
-          dragOffset.y = y - y1;
-          line.style.cursor = "grabbing";
-          e.preventDefault();
-          return;
+          // Smoothly move offsets toward target
+          this.offsetX1 += (targetOffsetX - this.offsetX1) * moveSpeed;
+          this.offsetY1 += (targetOffsetY - this.offsetY1) * moveSpeed;
+          this.offsetX2 += (targetOffsetX - this.offsetX2) * moveSpeed;
+          this.offsetY2 += (targetOffsetY - this.offsetY2) * moveSpeed;
+        } else {
+          // Return offsets to zero smoothly
+          this.offsetX1 += (0 - this.offsetX1) * moveSpeed;
+          this.offsetY1 += (0 - this.offsetY1) * moveSpeed;
+          this.offsetX2 += (0 - this.offsetX2) * moveSpeed;
+          this.offsetY2 += (0 - this.offsetY2) * moveSpeed;
         }
       }
-    });
-
-    window.addEventListener("mouseup", () => {
-      if (draggingLine) {
-        draggingLine.style.cursor = "grab";
+      draw(ctx) {
+        ctx.strokeStyle = "rgba(156, 163, 175, 0.3)";
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(this.origX1 + this.offsetX1, this.origY1 + this.offsetY1);
+        ctx.lineTo(this.origX2 + this.offsetX2, this.origY2 + this.offsetY2);
+        ctx.stroke();
       }
-      draggingLine = null;
-    });
+    }
+
+    function randomBetween(min, max) {
+      return Math.random() * (max - min) + min;
+    }
+
+    function generateLines() {
+      lines = [];
+      for (let i = 0; i < lineCount; i++) {
+        const x1 = randomBetween(0, width);
+        const y1 = randomBetween(0, height);
+        // Random angle and length
+        const angle = randomBetween(0, Math.PI * 2);
+        const length = randomBetween(40, maxLineLength);
+        const x2 = x1 + Math.cos(angle) * length;
+        const y2 = y1 + Math.sin(angle) * length;
+        lines.push(new Line(x1, y1, x2, y2));
+      }
+    }
+    generateLines();
+
+    let mouseX = width / 2;
+    let mouseY = height / 2;
 
     window.addEventListener("mousemove", (e) => {
-      const { x, y } = getMousePos(e);
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+    });
 
-      if (draggingLine) {
-        const x1 = parseFloat(draggingLine.getAttribute("x1"));
-        const y1 = parseFloat(draggingLine.getAttribute("y1"));
-        const x2 = parseFloat(draggingLine.getAttribute("x2"));
-        const y2 = parseFloat(draggingLine.getAttribute("y2"));
-
-        const dx = x - x1 - dragOffset.x;
-        const dy = y - y1 - dragOffset.y;
-
-        // Calculate new positions clamped inside SVG bounds
-        const newX1 = Math.min(Math.max(x1 + dx, 0), svg.clientWidth);
-        const newY1 = Math.min(Math.max(y1 + dy, 0), svg.clientHeight);
-        const newX2 = Math.min(Math.max(x2 + dx, 0), svg.clientWidth);
-        const newY2 = Math.min(Math.max(y2 + dy, 0), svg.clientHeight);
-
-        draggingLine.setAttribute("x1", newX1);
-        draggingLine.setAttribute("y1", newY1);
-        draggingLine.setAttribute("x2", newX2);
-        draggingLine.setAttribute("y2", newY2);
-
-        return;
-      }
-
-      // Highlight lines and stars on hover
+    function animate() {
+      ctx.clearRect(0, 0, width, height);
       lines.forEach((line) => {
-        const x1 = parseFloat(line.getAttribute("x1"));
-        const y1 = parseFloat(line.getAttribute("y1"));
-        const x2 = parseFloat(line.getAttribute("x2"));
-        const y2 = parseFloat(line.getAttribute("y2"));
-
-        const dist = pointLineDistance(x, y, x1, y1, x2, y2);
-        if (dist < 50) {
-          line.classList.add("highlight");
-        } else {
-          line.classList.remove("highlight");
-        }
+        line.update(mouseX, mouseY);
+        line.draw(ctx);
       });
-
-      stars.forEach((star) => {
-        const cx = parseFloat(star.getAttribute("cx"));
-        const cy = parseFloat(star.getAttribute("cy"));
-        const dist = Math.hypot(x - cx, y - cy);
-        if (dist < 40) {
-          star.classList.add("highlight");
-        } else {
-          star.classList.remove("highlight");
-        }
-      });
-    });
-
-    svg.addEventListener("mouseleave", () => {
-      lines.forEach((line) => line.classList.remove("highlight"));
-      stars.forEach((star) => star.classList.remove("highlight"));
-    });
+      requestAnimationFrame(animate);
+    }
+    animate();
 
     // Typing animation logic
     const nameEl = document.getElementById("name");
     const handleEl = document.getElementById("handle");
     const buttonsEl = document.getElementById("buttons");
     const typingCodeEl = document.getElementById("typingCode");
+
+    // Detect browser language and set English or Spanish accordingly
+    const userLang = navigator.language || navigator.userLanguage;
+    const lang = userLang.startsWith("es") ? "es" : "en";
 
     const content = {
       en: {
@@ -575,11 +552,7 @@
       },
     };
 
-    // Default language
-    let currentLang = "en";
-
     function setLanguage(lang) {
-      currentLang = lang;
       const data = content[lang];
       nameEl.textContent = data.name;
       handleEl.textContent = data.handle;
@@ -601,69 +574,8 @@
       startTypingAnimation(data.codeLines);
     }
 
-    // Initialize default language
-    setLanguage(currentLang);
-
-    // Settings panel toggle
-    const settingsBtn = document.getElementById("settingsBtn");
-    const settingsPanel = document.getElementById("settingsPanel");
-
-    settingsBtn.addEventListener("click", () => {
-      // Toggle language on each click for demo (English <-> Spanish)
-      currentLang = currentLang === "en" ? "es" : "en";
-      setLanguage(currentLang);
-
-      settingsPanel.classList.toggle("show");
-      if (settingsPanel.classList.contains("show")) {
-        settingsPanel.focus();
-      }
-    });
-
-    // Close settings panel on Escape key
-    window.addEventListener("keydown", (e) => {
-      if (e.key === "Escape" && settingsPanel.classList.contains("show")) {
-        settingsPanel.classList.remove("show");
-        settingsBtn.focus();
-      }
-    });
-
-    // Theme toggle buttons
-    const lightThemeBtn = document.getElementById("lightThemeBtn");
-    const darkThemeBtn = document.getElementById("darkThemeBtn");
-
-    function setTheme(theme) {
-      if (theme === "dark") {
-        document.body.classList.add("dark");
-      } else {
-        document.body.classList.remove("dark");
-      }
-      localStorage.setItem("theme", theme);
-    }
-
-    lightThemeBtn.addEventListener("click", () => setTheme("light"));
-    darkThemeBtn.addEventListener("click", () => setTheme("dark"));
-
-    // Load saved theme or default to light
-    const savedTheme = localStorage.getItem("theme") || "light";
-    setTheme(savedTheme);
-
-    // Register button placeholder
-    const registerBtn = document.getElementById("registerBtn");
-    registerBtn.addEventListener("click", () => {
-      alert("Register clicked (placeholder)");
-    });
-
-    // Login button placeholder
-    const loginBtn = document.getElementById("loginBtn");
-    loginBtn.addEventListener("click", () => {
-      alert("Login clicked (placeholder)");
-    });
-
-    // Logout button placeholder
-    const logoutBtn = document.getElementById("logoutBtn");
-    logoutBtn.addEventListener("click", () => {
-      alert("Log Out clicked (placeholder)");
-    });
+    // Initialize language based on browser
+    setLanguage(lang);
 
     // Typing animation variables
     let typingInterval;
@@ -718,6 +630,55 @@
         return `<span>${text}</span>`;
       }
     }
+
+    // Settings button and panel
+    const settingsBtn = document.getElementById("settingsBtn");
+    const settingsPanel = document.getElementById("settingsPanel");
+
+    settingsBtn.addEventListener("click", () => {
+      settingsPanel.classList.toggle("show");
+      if (settingsPanel.classList.contains("show")) {
+        settingsPanel.focus();
+      }
+    });
+
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && settingsPanel.classList.contains("show")) {
+        settingsPanel.classList.remove("show");
+        settingsBtn.focus();
+      }
+    });
+
+    // Theme toggle buttons
+    const lightThemeBtn = document.getElementById("lightThemeBtn");
+    const darkThemeBtn = document.getElementById("darkThemeBtn");
+
+    function setTheme(theme) {
+      if (theme === "dark") {
+        document.body.classList.add("dark");
+      } else {
+        document.body.classList.remove("dark");
+      }
+      localStorage.setItem("theme", theme);
+    }
+
+    lightThemeBtn.addEventListener("click", () => setTheme("light"));
+    darkThemeBtn.addEventListener("click", () => setTheme("dark"));
+
+    // Load saved theme or default to light
+    const savedTheme = localStorage.getItem("theme") || "light";
+    setTheme(savedTheme);
+
+    // Register, Login, Logout placeholders
+    document.getElementById("registerBtn").addEventListener("click", () => {
+      alert("Register clicked (placeholder)");
+    });
+    document.getElementById("loginBtn").addEventListener("click", () => {
+      alert("Login clicked (placeholder)");
+    });
+    document.getElementById("logoutBtn").addEventListener("click", () => {
+      alert("Log Out clicked (placeholder)");
+    });
   </script>
 </body>
 </html>

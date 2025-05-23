@@ -1,4 +1,3 @@
-```php
 <?php
 require 'vendor/autoload.php'; // Make sure mongodb/mongodb is installed via Composer
 

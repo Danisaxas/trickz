@@ -97,6 +97,10 @@
         ID must be a number.
       </p>
 
+      <p id="successMsg" class="text-center mt-2 text-green-500 text-[12px] font-normal hidden">
+        Te has registrado. <a href="#" id="loginLink" class="text-[#4a90e2] underline">Inicia sesión</a>
+      </p>
+
       <div class="flex items-center justify-center mt-6 space-x-3 text-white text-xs font-semibold">
         <div class="border-t border-white w-12"></div>
         <span>More information</span>
@@ -115,12 +119,15 @@
   <script>
     const loginForm = document.getElementById("loginForm");
     const errorMsg = document.getElementById("errorMsg");
+    const successMsg = document.getElementById("successMsg");
     const telegramIdInput = document.getElementById("telegramId");
     const passwordInput = document.getElementById("password");
     const keyInput = document.getElementById("key");
     const registerBtn = document.getElementById("registerBtn");
+    const loginLink = document.getElementById("loginLink");
 
     errorMsg.classList.add("hidden");
+    successMsg.classList.add("hidden");
 
     function validateId() {
       const idVal = telegramIdInput.value.trim();
@@ -138,9 +145,18 @@
       errorMsg.classList.add("hidden");
     }
 
+    function showSuccess() {
+      successMsg.classList.remove("hidden");
+    }
+
+    function hideSuccess() {
+      successMsg.classList.add("hidden");
+    }
+
     loginForm.addEventListener("submit", (e) => {
       e.preventDefault();
       hideError();
+      hideSuccess();
       if (!validateId()) {
         showError();
         return;
@@ -150,6 +166,7 @@
 
     registerBtn.addEventListener("click", async () => {
       hideError();
+      hideSuccess();
 
       const idVal = telegramIdInput.value.trim();
       const passwordVal = passwordInput.value.trim();
@@ -186,8 +203,10 @@
         const data = await response.json();
 
         if (response.ok) {
-          alert("Registration successful!");
+          showSuccess();
           loginForm.reset();
+          // Optionally set login link href to your login page URL
+          loginLink.href = "login.html"; // Change this to your actual login page URL
         } else {
           alert("Registration failed: " + (data.message || "Unknown error"));
         }

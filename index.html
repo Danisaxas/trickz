@@ -3,7 +3,7 @@
   <meta charset="utf-8"/>
   <meta content="width=device-width, initial-scale=1" name="viewport"/>
   <title>
-   Profile Card with Settings, Language, Theme Toggle, and Typing Animation
+   Profile Card with Settings, Typing Animation, and Interactive Background
   </title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
@@ -103,24 +103,6 @@
     .typing-value {
       color: #d35400;
     }
-    /* Minimalist language select */
-    #languageSelect {
-      background-color: #2a3a7a;
-      color: white;
-      font-family: 'Roboto Mono', monospace;
-      font-size: 0.875rem;
-      padding: 0.25rem 0.5rem;
-      border-radius: 0.375rem;
-      border: none;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-      outline-offset: 2px;
-      outline-color: transparent;
-    }
-    #languageSelect:hover, #languageSelect:focus {
-      background-color: #3b4a9a;
-      outline-color: #facc15;
-    }
     /* Settings button bottom-left */
     #settingsBtn {
       position: fixed;
@@ -171,22 +153,6 @@
       border-bottom: 1px solid #2a3a7a;
       padding-bottom: 0.25rem;
     }
-    #settingsPanel button, #settingsPanel select {
-      background-color: #2a3a7a;
-      border: none;
-      border-radius: 0.375rem;
-      color: white;
-      font-family: 'Roboto Mono', monospace;
-      font-size: 0.875rem;
-      padding: 0.4rem 0.75rem;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-      width: 100%;
-    }
-    #settingsPanel button:hover, #settingsPanel select:hover, #settingsPanel button:focus, #settingsPanel select:focus {
-      background-color: #3b4a9a;
-      outline: none;
-    }
     #settingsPanel .section {
       display: flex;
       flex-direction: column;
@@ -195,13 +161,38 @@
     #settingsPanel .section label {
       font-weight: 600;
     }
-    #settingsPanel .section .btn-group {
+    #settingsPanel .btn-group {
       display: flex;
       gap: 0.5rem;
     }
     #settingsPanel .btn-group button {
       flex: 1;
       padding: 0.4rem 0;
+      background-color: #2a3a7a;
+      border: none;
+      border-radius: 0.375rem;
+      color: white;
+      font-family: 'Roboto Mono', monospace;
+      font-size: 0.875rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    #settingsPanel .btn-group button:hover,
+    #settingsPanel .btn-group button:focus {
+      background-color: #3b4a9a;
+      outline: none;
+    }
+    #settingsPanel button.logout {
+      background-color: #dc2626;
+      padding: 0.5rem;
+      border-radius: 0.375rem;
+      font-weight: 600;
+      transition: background-color 0.3s ease;
+    }
+    #settingsPanel button.logout:hover,
+    #settingsPanel button.logout:focus {
+      background-color: #b91c1c;
+      outline: none;
     }
     /* Dark theme */
     body.dark {
@@ -218,14 +209,6 @@
     body.dark .typing-value {
       color: #ea580c;
     }
-    body.dark #languageSelect {
-      background-color: #1e293b;
-      color: #cbd5e1;
-    }
-    body.dark #languageSelect:hover, body.dark #languageSelect:focus {
-      background-color: #334155;
-      outline-color: #facc15;
-    }
     body.dark #settingsBtn {
       background-color: #1e293b;
       box-shadow: 0 0 10px rgb(250 204 21 / 0.7);
@@ -238,12 +221,20 @@
       box-shadow: 0 0 15px rgb(250 204 21 / 0.7);
       color: #cbd5e1;
     }
-    body.dark #settingsPanel button, body.dark #settingsPanel select {
+    body.dark #settingsPanel .btn-group button {
       background-color: #334155;
       color: #cbd5e1;
     }
-    body.dark #settingsPanel button:hover, body.dark #settingsPanel select:hover, body.dark #settingsPanel button:focus, body.dark #settingsPanel select:focus {
+    body.dark #settingsPanel .btn-group button:hover,
+    body.dark #settingsPanel .btn-group button:focus {
       background-color: #475569;
+    }
+    body.dark #settingsPanel button.logout {
+      background-color: #b91c1c;
+    }
+    body.dark #settingsPanel button.logout:hover,
+    body.dark #settingsPanel button.logout:focus {
+      background-color: #7f1d1d;
     }
   </style>
  </head>
@@ -272,20 +263,11 @@
   <div class="absolute bottom-20 right-28 w-1.5 h-1.5 rounded-full bg-[#9ca3af] opacity-30"></div>
   <div class="absolute bottom-10 left-20 w-1.5 h-1.5 rounded-full bg-[#9ca3af] opacity-30"></div>
 
-  <!-- Language select -->
-  <div class="mb-6 z-20 relative">
-   <label for="languageSelect" class="sr-only">Language</label>
-   <select id="languageSelect" aria-label="Select language">
-    <option value="en" selected>English</option>
-    <option value="es">Español</option>
-   </select>
-  </div>
-
   <div class="max-w-xs w-full rounded-xl shadow-lg shadow-black/40 overflow-hidden bg-[#12161f] relative z-10">
    <div class="relative">
     <img alt="Desk with laptop, books, and a shadowed wall background" class="w-full h-44 object-cover rounded-t-xl" height="180" src="https://storage.googleapis.com/a1aa/image/6390a342-c59a-4930-a6a6-cbcdb0acad7b.jpg" width="400"/>
     <div class="absolute top-4 right-4 flex flex-col gap-3">
-     <a href="https://t.me/yTricz" target="_blank" rel="noopener noreferrer" aria-label="Telegram link" class="w-10 h-10 rounded-full bg-[#243a56]/80 flex items-center justify-center text-white hover:bg-[#243a56]/90 transition">
+     <a href="https://t.me/yTrickz" target="_blank" rel="noopener noreferrer" aria-label="Telegram link" class="w-10 h-10 rounded-full bg-[#243a56]/80 flex items-center justify-center text-white hover:bg-[#243a56]/90 transition">
       <i class="fab fa-telegram-plane"></i>
      </a>
      <button aria-label="Visit website" class="w-10 h-10 rounded-full bg-[#243a56]/80 flex items-center justify-center text-white hover:bg-[#243a56]/90 transition">
@@ -338,14 +320,6 @@
     </div>
    </div>
 
-   <div class="section" id="languageSection">
-    <label for="languageSelectPanel">Language</label>
-    <select id="languageSelectPanel" aria-label="Select language">
-     <option value="en" selected>English</option>
-     <option value="es">Español</option>
-    </select>
-   </div>
-
    <div class="section" id="themeSection">
     <label>Theme</label>
     <div class="btn-group">
@@ -355,18 +329,18 @@
    </div>
 
    <div class="section" id="logoutSection">
-    <button type="button" id="logoutBtn" class="bg-red-600 hover:bg-red-700 focus:bg-red-700">Log Out</button>
+    <button type="button" id="logoutBtn" class="logout">Log Out</button>
    </div>
   </aside>
 
   <script>
-   // Interactive background lines and stars highlight on mouse move and stretch lines on drag
+   // Interactive background lines and stars highlight on mouse move and drag entire line
     const svg = document.querySelector('.animated-bg');
     const lines = Array.from(svg.querySelectorAll('.line'));
     const stars = Array.from(svg.querySelectorAll('.star'));
 
     let draggingLine = null;
-    let dragPoint = null; // 'start' or 'end'
+    let dragOffset = { x: 0, y: 0 };
 
     function getMousePos(evt) {
       const rect = svg.getBoundingClientRect();
@@ -408,10 +382,6 @@
       return Math.sqrt(dx * dx + dy * dy);
     }
 
-    function isNearPoint(px, py, x, y, radius = 10) {
-      return Math.hypot(px - x, py - y) <= radius;
-    }
-
     svg.addEventListener('mousedown', (e) => {
       const {x, y} = getMousePos(e);
       for (const line of lines) {
@@ -420,16 +390,11 @@
         const x2 = parseFloat(line.getAttribute('x2'));
         const y2 = parseFloat(line.getAttribute('y2'));
 
-        if (isNearPoint(x, y, x1, y1)) {
+        const dist = pointLineDistance(x, y, x1, y1, x2, y2);
+        if (dist < 10) {
           draggingLine = line;
-          dragPoint = 'start';
-          line.style.cursor = 'grabbing';
-          e.preventDefault();
-          return;
-        }
-        if (isNearPoint(x, y, x2, y2)) {
-          draggingLine = line;
-          dragPoint = 'end';
+          dragOffset.x = x - x1;
+          dragOffset.y = y - y1;
           line.style.cursor = 'grabbing';
           e.preventDefault();
           return;
@@ -442,24 +407,31 @@
         draggingLine.style.cursor = 'grab';
       }
       draggingLine = null;
-      dragPoint = null;
     });
 
     window.addEventListener('mousemove', (e) => {
       const {x, y} = getMousePos(e);
 
       if (draggingLine) {
-        // Clamp x and y inside SVG bounds
-        const clampedX = Math.min(Math.max(x, 0), svg.clientWidth);
-        const clampedY = Math.min(Math.max(y, 0), svg.clientHeight);
+        const x1 = parseFloat(draggingLine.getAttribute('x1'));
+        const y1 = parseFloat(draggingLine.getAttribute('y1'));
+        const x2 = parseFloat(draggingLine.getAttribute('x2'));
+        const y2 = parseFloat(draggingLine.getAttribute('y2'));
 
-        if (dragPoint === 'start') {
-          draggingLine.setAttribute('x1', clampedX);
-          draggingLine.setAttribute('y1', clampedY);
-        } else if (dragPoint === 'end') {
-          draggingLine.setAttribute('x2', clampedX);
-          draggingLine.setAttribute('y2', clampedY);
-        }
+        const dx = x - x1 - dragOffset.x;
+        const dy = y - y1 - dragOffset.y;
+
+        // Calculate new positions clamped inside SVG bounds
+        const newX1 = Math.min(Math.max(x1 + dx, 0), svg.clientWidth);
+        const newY1 = Math.min(Math.max(y1 + dy, 0), svg.clientHeight);
+        const newX2 = Math.min(Math.max(x2 + dx, 0), svg.clientWidth);
+        const newY2 = Math.min(Math.max(y2 + dy, 0), svg.clientHeight);
+
+        draggingLine.setAttribute('x1', newX1);
+        draggingLine.setAttribute('y1', newY1);
+        draggingLine.setAttribute('x2', newX2);
+        draggingLine.setAttribute('y2', newY2);
+
         return;
       }
 
@@ -495,9 +467,7 @@
       stars.forEach(star => star.classList.remove('highlight'));
     });
 
-    // Language select functionality
-    const languageSelect = document.getElementById('languageSelect');
-    const languageSelectPanel = document.getElementById('languageSelectPanel');
+    // Typing animation logic
     const nameEl = document.getElementById('name');
     const handleEl = document.getElementById('handle');
     const buttonsEl = document.getElementById('buttons');
@@ -544,7 +514,11 @@
       }
     };
 
+    // Default language
+    let currentLang = 'en';
+
     function setLanguage(lang) {
+      currentLang = lang;
       const data = content[lang];
       nameEl.textContent = data.name;
       handleEl.textContent = data.handle;
@@ -562,22 +536,74 @@
         buttonsEl.appendChild(button);
       });
 
-      // Sync selects
-      languageSelect.value = lang;
-      languageSelectPanel.value = lang;
-
-      // Start typing animation with new language code lines
       startTypingAnimation(data.codeLines);
     }
 
-    languageSelect.addEventListener('change', (e) => {
-      setLanguage(e.target.value);
-    });
-    languageSelectPanel.addEventListener('change', (e) => {
-      setLanguage(e.target.value);
+    // Initialize default language
+    setLanguage(currentLang);
+
+    // Settings panel toggle
+    const settingsBtn = document.getElementById('settingsBtn');
+    const settingsPanel = document.getElementById('settingsPanel');
+
+    settingsBtn.addEventListener('click', () => {
+      // Toggle language on each click for demo (English <-> Spanish)
+      currentLang = currentLang === 'en' ? 'es' : 'en';
+      setLanguage(currentLang);
+
+      settingsPanel.classList.toggle('show');
+      if (settingsPanel.classList.contains('show')) {
+        settingsPanel.focus();
+      }
     });
 
-    // Typing animation logic
+    // Close settings panel on Escape key
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && settingsPanel.classList.contains('show')) {
+        settingsPanel.classList.remove('show');
+        settingsBtn.focus();
+      }
+    });
+
+    // Theme toggle buttons
+    const lightThemeBtn = document.getElementById('lightThemeBtn');
+    const darkThemeBtn = document.getElementById('darkThemeBtn');
+
+    function setTheme(theme) {
+      if (theme === 'dark') {
+        document.body.classList.add('dark');
+      } else {
+        document.body.classList.remove('dark');
+      }
+      localStorage.setItem('theme', theme);
+    }
+
+    lightThemeBtn.addEventListener('click', () => setTheme('light'));
+    darkThemeBtn.addEventListener('click', () => setTheme('dark'));
+
+    // Load saved theme or default to light
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    setTheme(savedTheme);
+
+    // Register button placeholder
+    const registerBtn = document.getElementById('registerBtn');
+    registerBtn.addEventListener('click', () => {
+      alert('Register clicked (placeholder)');
+    });
+
+    // Login button placeholder
+    const loginBtn = document.getElementById('loginBtn');
+    loginBtn.addEventListener('click', () => {
+      alert('Login clicked (placeholder)');
+    });
+
+    // Logout button placeholder
+    const logoutBtn = document.getElementById('logoutBtn');
+    logoutBtn.addEventListener('click', () => {
+      alert('Log Out clicked (placeholder)');
+    });
+
+    // Typing animation variables
     let typingInterval;
     let currentLineIndex = 0;
     let currentCharIndex = 0;
@@ -621,72 +647,15 @@
       setTimeout(type, isDeleting ? 60 : 120);
     }
 
-    // Highlight parts of the code line with spans for colors
     function highlightCode(text) {
-      // Regex to separate variable, equal sign, and value with quotes and semicolon
-      // Example: $variable = 'PHP';
       const regex = /^(\$variable)(\s*=\s*)('.*?')(;?)$/;
       const match = text.match(regex);
       if (match) {
         return `<span class="typing-variable">${match[1]}</span>${match[2]}<span class="typing-value">${match[3]}</span>${match[4]}`;
       } else {
-        // If partial typing, color whole text white
         return `<span>${text}</span>`;
       }
     }
-
-    // Initialize default language English and start typing
-    setLanguage('en');
-
-    // Settings panel toggle
-    const settingsBtn = document.getElementById('settingsBtn');
-    const settingsPanel = document.getElementById('settingsPanel');
-
-    settingsBtn.addEventListener('click', () => {
-      settingsPanel.classList.toggle('show');
-      if (settingsPanel.classList.contains('show')) {
-        settingsPanel.focus();
-      }
-    });
-
-    // Close settings panel on Escape key
-    window.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && settingsPanel.classList.contains('show')) {
-        settingsPanel.classList.remove('show');
-        settingsBtn.focus();
-      }
-    });
-
-    // Theme toggle buttons
-    const lightThemeBtn = document.getElementById('lightThemeBtn');
-    const darkThemeBtn = document.getElementById('darkThemeBtn');
-
-    function setTheme(theme) {
-      if (theme === 'dark') {
-        document.body.classList.add('dark');
-      } else {
-        document.body.classList.remove('dark');
-      }
-      localStorage.setItem('theme', theme);
-    }
-
-    lightThemeBtn.addEventListener('click', () => setTheme('light'));
-    darkThemeBtn.addEventListener('click', () => setTheme('dark'));
-
-    // Load saved theme or default to light
-    const savedTheme = localStorage.getItem('theme') || 'light';
-    setTheme(savedTheme);
-
-    // Register, Login, Logout buttons (placeholders)
-    document.getElementById('registerBtn').addEventListener('click', () => {
-      alert('Register clicked (placeholder)');
-    });
-    document.getElementById('loginBtn').addEventListener('click', () => {
-      alert('Login clicked (placeholder)');
-    });
-    document.getElementById('logoutBtn').addEventListener('click', () => {
-      alert('Log Out clicked (placeholder)');
-    });
   </script>
  </body>
 </html>

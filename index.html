@@ -1,43 +1,200 @@
-<!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Mi Biografía - Minimalista</title>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.3.2/dist/tailwind.min.css" rel="stylesheet" />
+  <title>Login - MinoruChk</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+  />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter&display=swap"
+    rel="stylesheet"
+  />
   <style>
-    /* Custom font */
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
     body {
-      font-family: 'Inter', sans-serif;
+      font-family: "Inter", sans-serif;
     }
   </style>
 </head>
-<body class="bg-gray-50 text-gray-900 flex items-center justify-center min-h-screen px-4">
-  <main class="max-w-xl w-full bg-white rounded-xl shadow-md p-8">
-    <header class="flex flex-col items-center space-y-4 mb-6">
-      <div class="w-24 h-24 rounded-full bg-gray-200 overflow-hidden flex items-center justify-center">
-        <!-- Placeholder for profile image -->
-        <svg class="w-16 h-16 text-gray-400" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"></path>
-        </svg>
+<body>
+  <div
+    class="min-h-screen flex items-center justify-center"
+    style="background: linear-gradient(135deg, #1f5a4a 0%, #1a1a4f 100%)"
+  >
+    <div
+      class="bg-[#1a2230] rounded-md p-8 w-[320px] sm:w-[360px] text-white shadow-lg"
+      style="font-size: 14px"
+    >
+      <h2 class="text-center mb-6 text-white text-lg font-normal">
+        Welcome to
+        <span class="text-[#4a90e2] font-normal cursor-pointer select-none"
+          >MinoruChk</span
+        >
+      </h2>
+
+      <form id="loginForm" class="space-y-4" novalidate>
+        <label class="block text-[#4a90e2] text-xs font-normal mb-1" for="telegramId">
+          <i class="fas fa-user fa-xs mr-1"></i> Telegram ID
+        </label>
+        <input
+          id="telegramId"
+          name="telegramId"
+          type="text"
+          placeholder="ID"
+          class="w-full rounded border border-[#4a90e2] bg-[#2a3447] px-3 py-2 text-white placeholder:text-[#7ea1ff] focus:outline-none focus:ring-1 focus:ring-[#4a90e2]"
+          autocomplete="off"
+        />
+
+        <label class="block text-[#4a90e2] text-xs font-normal mb-1" for="password">
+          <i class="fas fa-lock fa-xs mr-1"></i>
+          <span class="font-semibold">Password:</span>
+        </label>
+        <input
+          id="password"
+          name="password"
+          type="password"
+          placeholder="Password"
+          class="w-full rounded border border-[#4a90e2] bg-[#2a3447] px-3 py-2 text-white placeholder:text-[#7ea1ff] focus:outline-none focus:ring-1 focus:ring-[#4a90e2]"
+          autocomplete="off"
+        />
+
+        <label class="block text-[#7ea1ff] text-xs font-normal mb-1" for="key">
+          <i class="fas fa-key fa-xs mr-1"></i> Key
+        </label>
+        <input
+          id="key"
+          name="key"
+          type="text"
+          placeholder="Key (registry only)"
+          class="w-full rounded border border-[#4a90e2] bg-[#2a3447] px-3 py-2 text-white placeholder:text-[#7ea1ff] focus:outline-none focus:ring-1 focus:ring-[#4a90e2]"
+          autocomplete="off"
+        />
+
+        <div class="flex space-x-3 mt-2">
+          <button
+            id="loginBtn"
+            type="submit"
+            class="flex-1 bg-[#4a90e2] font-semibold text-white rounded px-4 py-2 hover:bg-[#3a7de0] transition"
+          >
+            Login
+          </button>
+          <button
+            id="registerBtn"
+            type="button"
+            class="flex-1 bg-[#1bcf9c] font-normal text-white rounded px-4 py-2 hover:bg-[#17b88a] transition"
+          >
+            Register
+          </button>
+        </div>
+      </form>
+
+      <p id="forgotPassword" class="text-center mt-3 text-[#4a90e2] text-[10px] font-normal leading-tight">
+        Forgot your password?
+      </p>
+      <p id="errorMsg" class="text-center mt-1 text-[#e94a4a] text-[12px] font-normal leading-tight hidden">
+        ID must be a number.
+      </p>
+
+      <div class="flex items-center justify-center mt-6 space-x-3 text-white text-xs font-semibold">
+        <div class="border-t border-white w-12"></div>
+        <span>More information</span>
+        <div class="border-t border-white w-12"></div>
       </div>
-      <h1 class="text-3xl font-bold">Tu Nombre</h1>
-      <p class="text-sm text-gray-500 uppercase tracking-wide">Mi biografía minimalista</p>
-    </header>
-    <section>
-      <p class="text-lg leading-relaxed">
-        Hola, soy <strong>Tu Nombre</strong>, un apasionado del desarrollo web y diseño minimalista. Me encanta crear experiencias digitales limpias, funcionales y visualmente atractivas. 
-        Con experiencia en múltiples tecnologías y un enfoque en la simplicidad, busco siempre la elegancia en el código y la estética.
-      </p>
-      <p class="mt-4 text-lg leading-relaxed">
-        Cuando no estoy programando, disfruto leer, viajar y practicar fotografía. Creo que la belleza está en los detalles simples y la autenticidad.
-      </p>
-    </section>
-    <footer class="mt-8 text-center text-gray-400 text-sm">
-      © 2024 Tu Nombre. Todos los derechos reservados.
-    </footer>
-  </main>
+
+      <div class="text-center mt-3 text-white text-[11px] font-normal">
+        <i class="fas fa-key mr-1"></i> Official Links
+      </div>
+      <div class="text-center mt-1 text-[#4a90e2] text-[11px] font-normal">
+        Minoru Group - MinoruChkBot
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const loginForm = document.getElementById("loginForm");
+    const errorMsg = document.getElementById("errorMsg");
+    const telegramIdInput = document.getElementById("telegramId");
+    const passwordInput = document.getElementById("password");
+    const keyInput = document.getElementById("key");
+    const registerBtn = document.getElementById("registerBtn");
+
+    errorMsg.classList.add("hidden");
+
+    function validateId() {
+      const idVal = telegramIdInput.value.trim();
+      if (idVal === "" || isNaN(idVal)) {
+        return false;
+      }
+      return true;
+    }
+
+    function showError() {
+      errorMsg.classList.remove("hidden");
+    }
+
+    function hideError() {
+      errorMsg.classList.add("hidden");
+    }
+
+    loginForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      hideError();
+      if (!validateId()) {
+        showError();
+        return;
+      }
+      alert("Login successful (demo)");
+    });
+
+    registerBtn.addEventListener("click", async () => {
+      hideError();
+
+      const idVal = telegramIdInput.value.trim();
+      const passwordVal = passwordInput.value.trim();
+      const keyVal = keyInput.value.trim();
+
+      if (!validateId()) {
+        showError();
+        return;
+      }
+
+      if (keyVal !== "Dan1906") {
+        alert("Invalid key for registration.");
+        return;
+      }
+
+      if (passwordVal === "") {
+        alert("Please enter a password.");
+        return;
+      }
+
+      try {
+        const response = await fetch("app.php", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            telegramId: idVal,
+            password: passwordVal,
+            key: keyVal,
+          }),
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          alert("Registration successful!");
+          loginForm.reset();
+        } else {
+          alert("Registration failed: " + (data.message || "Unknown error"));
+        }
+      } catch (error) {
+        alert("Error connecting to server: " + error.message);
+      }
+    });
+  </script>
 </body>
 </html>
-
